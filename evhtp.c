@@ -2799,10 +2799,6 @@ evhtp_parse_query_wflags(const char * query, size_t len, int flags) {
     key_idx    = 0;
     val_idx    = 0;
 
-#ifdef EVHTP_HAS_C99
-    char key_buf[len + 1];
-    char val_buf[len + 1];
-#else
     char * key_buf;
     char * val_buf;
 
@@ -2811,7 +2807,6 @@ evhtp_parse_query_wflags(const char * query, size_t len, int flags) {
 
     val_buf = malloc(len + 1);
     evhtp_alloc_assert(val_buf);
-#endif
 
     for (i = 0; i < len; i++) {
         ch = query[i];
@@ -3008,18 +3003,9 @@ evhtp_parse_query_wflags(const char * query, size_t len, int flags) {
         } while (0);
     }
 
-#ifndef EVHTP_HAS_C99
-    evhtp_safe_free(key_buf, free);
-    evhtp_safe_free(val_buf, free);
-#endif
 
     return query_args;
 error:
-#ifndef EVHTP_HAS_C99
-    evhtp_safe_free(key_buf, free);
-    evhtp_safe_free(val_buf, free);
-#endif
-
     evhtp_query_free(query_args);
 
     return NULL;
